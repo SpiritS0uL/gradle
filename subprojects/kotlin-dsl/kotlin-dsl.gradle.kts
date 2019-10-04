@@ -32,7 +32,6 @@ gradlebuildJava {
 }
 
 dependencies {
-    api(project(":kotlinDslToolingModels"))
     api(project(":kotlinCompilerEmbeddable"))
     api(futureKotlin("stdlib-jdk8"))
 
