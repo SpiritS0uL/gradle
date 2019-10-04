@@ -16,15 +16,15 @@
 
 package org.gradle.kotlin.dsl.tooling.builders
 
+import groovy.transform.CompileStatic
 import org.gradle.kotlin.dsl.tooling.models.KotlinDslModelsParameters
 import org.gradle.kotlin.dsl.tooling.models.KotlinDslScriptsModel
 import org.gradle.tooling.ProjectConnection
 
 import javax.annotation.Nullable
 
-import static org.gradle.kotlin.dsl.resolver.KotlinBuildScriptModelRequestKt.newCorrelationId
 
-
+@CompileStatic
 class KotlinDslScriptsModelClient {
 
     /**
@@ -34,7 +34,7 @@ class KotlinDslScriptsModelClient {
      * @param request the model request parameters
      * @return the model for all requested scripts
      */
-    KotlinDslScriptsModel fetchKotlinDslScriptsModel(ProjectConnection connection, KotlinDslScriptsModelRequest request) {
+    static KotlinDslScriptsModel fetchKotlinDslScriptsModel(ProjectConnection connection, KotlinDslScriptsModelRequest request) {
         return connection.model(KotlinDslScriptsModel).tap {
 
             if (request.environmentVariables != null && !request.environmentVariables.isEmpty()) {
@@ -52,7 +52,7 @@ class KotlinDslScriptsModelClient {
 
             forTasks(KotlinDslModelsParameters.PREPARATION_TASK_NAME)
 
-            def arguments = request.options + "-P${KotlinDslModelsParameters.CORRELATION_ID_GRADLE_PROPERTY_NAME}=${request.correlationId}".toString()
+            def arguments = request.options
             if (!request.scripts.isEmpty()) {
                 arguments += "-P${KotlinDslScriptsModel.SCRIPTS_GRADLE_PROPERTY_NAME}=${request.scripts.collect { it.canonicalPath }.join("|")}".toString()
             }
@@ -61,6 +61,7 @@ class KotlinDslScriptsModelClient {
         }.get()
     }
 }
+
 
 /**
  * Kotlin DSL model request for a set of scripts.
@@ -109,21 +110,13 @@ class KotlinDslScriptsModelRequest {
      */
     final Boolean lenient
 
-    /**
-     * Request correlation identifier.
-     * For client/Gradle logs correlation.
-     * Defaults to a time based identifier.
-     */
-    final String correlationId
-
     KotlinDslScriptsModelRequest(
         List<File> scripts,
         @Nullable Map<String, String> environmentVariables = null,
         @Nullable File javaHome = null,
         List<String> jvmOptions = [],
         List<String> options = [],
-        Boolean lenient = false,
-        String correlationId = newCorrelationId()
+        Boolean lenient = false
     ) {
         this.scripts = scripts
         this.environmentVariables = environmentVariables
@@ -131,6 +124,5 @@ class KotlinDslScriptsModelRequest {
         this.jvmOptions = jvmOptions
         this.options = options
         this.lenient = lenient
-        this.correlationId = correlationId
     }
 }
