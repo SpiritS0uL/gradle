@@ -81,7 +81,7 @@ class KotlinDslToolingModelsClasspathProvider implements ToolingApiAdditionalCla
         return kotlinDslVersion
     }
 
-    private static Map<String, String> VERSION_HISTORY = [
+    private static final Map<String, String> VERSION_HISTORY = [
         "5.6": "5.6",
         "5.5": "5.5",
         "5.4": "5.4",
