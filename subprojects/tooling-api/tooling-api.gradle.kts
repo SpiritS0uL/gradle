@@ -33,7 +33,10 @@ val buildReceipt: Provider<RegularFile> = rootProject.tasks.named<BuildReceipt>(
 
 shadedJar {
     shadedConfiguration.exclude(mapOf("group" to "org.slf4j", "module" to "slf4j-api"))
-    keepPackages.set(listOf("org.gradle.tooling"))
+    keepPackages.set(listOf(
+        "org.gradle.tooling",
+        "org.gradle.kotlin.dsl.tooling.models"
+    ))
     unshadedPackages.set(listOf("org.gradle", "org.slf4j", "sun.misc"))
     ignoredPackages.set(setOf("org.gradle.tooling.provider.model"))
     buildReceiptFile.set(buildReceipt)
