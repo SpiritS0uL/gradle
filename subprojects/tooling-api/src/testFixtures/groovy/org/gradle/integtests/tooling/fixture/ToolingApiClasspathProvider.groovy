@@ -65,6 +65,7 @@ trait ToolingApiClasspathProvider {
         sharedSpec.allowPackage('org.gradle.language.fixtures')
         sharedSpec.allowPackage('org.gradle.workers.fixtures')
         sharedSpec.allowPackage('org.gradle.launcher.daemon.testing')
+        sharedSpec.allowPackage('org.gradle.kotlin.dsl.tooling.models')
         sharedSpec.allowClass(OperatingSystem)
         sharedSpec.allowClass(Requires)
         sharedSpec.allowClass(TestPrecondition)
