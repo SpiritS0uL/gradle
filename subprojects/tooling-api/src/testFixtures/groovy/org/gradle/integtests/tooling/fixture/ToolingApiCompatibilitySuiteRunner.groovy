@@ -46,7 +46,11 @@ class ToolingApiCompatibilitySuiteRunner extends AbstractCompatibilityTestRunner
     @Override
     protected void createExecutionsForContext(CoverageContext coverageContext) {
         // current vs. current
-        add(new ToolingApiExecution(getResolver().resolve(current.version.version), current))
+        add(new ToolingApiExecution(
+            getResolver().resolutionServices,
+            getResolver().resolve(current.version.version),
+            current
+        ))
         super.createExecutionsForContext(coverageContext)
     }
 
@@ -57,9 +61,17 @@ class ToolingApiCompatibilitySuiteRunner extends AbstractCompatibilityTestRunner
         def distribution = versionedTool.distribution
         if (distribution.toolingApiSupported) {
             // current vs. target
-            executions.add(new ToolingApiExecution(getResolver().resolve(current.version.version), distribution))
+            executions.add(new ToolingApiExecution(
+                getResolver().resolutionServices,
+                getResolver().resolve(current.version.version),
+                distribution
+            ))
             // target vs. current
-            executions.add(new ToolingApiExecution(getResolver().resolve(distribution.version.version), current))
+            executions.add(new ToolingApiExecution(
+                getResolver().resolutionServices,
+                getResolver().resolve(distribution.version.version),
+                current
+            ))
         }
 
         return executions

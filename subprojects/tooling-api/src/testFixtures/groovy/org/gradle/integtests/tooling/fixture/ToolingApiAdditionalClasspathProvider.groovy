@@ -16,6 +16,7 @@
 
 package org.gradle.integtests.tooling.fixture
 
+import org.gradle.api.internal.artifacts.DependencyResolutionServices
 import org.gradle.integtests.fixtures.executer.GradleDistribution
 
 
@@ -27,5 +28,9 @@ interface ToolingApiAdditionalClasspathProvider {
     /**
      * Additional classpath for given target Gradle distribution to be added to the loader of the test class.
      */
-    List<File> additionalClasspathFor(GradleDistribution distribution)
+    List<File> additionalClasspathFor(
+        DependencyResolutionServices resolutionServices,
+        ToolingApiDistribution toolingApi,
+        GradleDistribution distribution
+    )
 }

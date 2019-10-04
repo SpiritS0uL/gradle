@@ -16,8 +16,10 @@
 
 package org.gradle.kotlin.dsl.tooling.builders
 
+import org.gradle.api.internal.artifacts.DependencyResolutionServices
 import org.gradle.integtests.fixtures.executer.GradleDistribution
 import org.gradle.integtests.tooling.fixture.ToolingApiAdditionalClasspathProvider
+import org.gradle.integtests.tooling.fixture.ToolingApiDistribution
 
 
 /**
@@ -26,8 +28,12 @@ import org.gradle.integtests.tooling.fixture.ToolingApiAdditionalClasspathProvid
 class KotlinDslToolingModelsClasspathProvider implements ToolingApiAdditionalClasspathProvider {
 
     @Override
-    List<File> additionalClasspathFor(GradleDistribution distribution) {
-        distribution.gradleHomeDir.file("lib").listFiles().findAll { file ->
+    List<File> additionalClasspathFor(
+        DependencyResolutionServices resolutionServices,
+        ToolingApiDistribution toolingApi,
+        GradleDistribution gradle
+    ) {
+        return gradle.gradleHomeDir.file("lib").listFiles().findAll { file ->
             file.name.startsWith("gradle-kotlin-dsl-") || file.name.startsWith("kotlin-stdlib-")
         }.tap { classpath ->
             assert classpath.size() >= 3

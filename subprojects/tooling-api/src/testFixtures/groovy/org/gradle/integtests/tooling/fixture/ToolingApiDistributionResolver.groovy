@@ -27,7 +27,7 @@ import org.gradle.integtests.fixtures.executer.LocallyBuiltGradleDistribution
 import org.gradle.testfixtures.ProjectBuilder
 
 class ToolingApiDistributionResolver {
-    private final DependencyResolutionServices resolutionServices
+    final DependencyResolutionServices resolutionServices
     private final Map<String, ToolingApiDistribution> distributions = [:]
     private final IntegrationTestBuildContext buildContext = new IntegrationTestBuildContext()
     private boolean useExternalToolingApiDistribution = false

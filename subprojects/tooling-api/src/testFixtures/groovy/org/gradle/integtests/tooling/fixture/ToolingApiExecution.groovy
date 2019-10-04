@@ -16,6 +16,7 @@
 
 package org.gradle.integtests.tooling.fixture
 
+import org.gradle.api.internal.artifacts.DependencyResolutionServices
 import org.gradle.api.specs.Spec
 import org.gradle.api.specs.Specs
 import org.gradle.integtests.fixtures.AbstractMultiTestRunner
@@ -28,10 +29,16 @@ import spock.lang.Unroll
 class ToolingApiExecution extends AbstractMultiTestRunner.Execution implements ToolingApiClasspathProvider {
     private static final Map<String, ClassLoader> TEST_CLASS_LOADERS = [:]
 
-    final ToolingApiDistribution toolingApi
-    final GradleDistribution gradle
+    private final DependencyResolutionServices resolutionServices
+    private final ToolingApiDistribution toolingApi
+    private final GradleDistribution gradle
 
-    ToolingApiExecution(ToolingApiDistribution toolingApi, GradleDistribution gradle) {
+    ToolingApiExecution(
+        DependencyResolutionServices resolutionServices,
+        ToolingApiDistribution toolingApi,
+        GradleDistribution gradle
+    ) {
+        this.resolutionServices = resolutionServices
         this.toolingApi = toolingApi
         this.gradle = gradle
     }
@@ -108,7 +115,9 @@ class ToolingApiExecution extends AbstractMultiTestRunner.Execution implements T
 
     private List<File> collectAdditionalClasspath() {
         target.annotations.findAll { it instanceof ToolingApiAdditionalClasspath }.collectMany { annotation ->
-            (annotation as ToolingApiAdditionalClasspath).value().newInstance().additionalClasspathFor(gradle)
+            (annotation as ToolingApiAdditionalClasspath).value()
+                .newInstance()
+                .additionalClasspathFor(resolutionServices, toolingApi, gradle)
         }
     }
 
